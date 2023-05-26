@@ -58,7 +58,7 @@ proc displayMessage {response target} {
 
 proc script_loaded {} {
     global author
-    putlog "Script loaded successfully."
+    putlog "OpenAI v1.0 script loaded successfully."
     putlog "Author: $author"
 }
 
