@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-# Set your OpenAI ! Important !
+# Set your OpenAI key ! Important !
 openai.api_key = 'Entry Your API Key here'
 
 # True = onlyLan ( 127.0.0.1 ); False = Listen at ex.IP use ( 0.0.0.0 ) def port 5000 
