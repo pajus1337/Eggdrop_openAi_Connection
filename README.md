@@ -28,11 +28,11 @@ Before running the scripts, make sure you have the following:
 
 ## Usage
 
-1. Run the `aIconnection.tcl` script using the Tcl interpreter.
+1. Run the `aIconnection.tcl` script using the Tcl interpreter like in eggdrop.cfg ( source scripts/script_name.tcl )
 
 2. Run the `OpenAIChatAPI.py` script using the Python interpreter.
 
-3. The chat bot will now listen for incoming messages in the chat and generate responses using the OpenAI Chat API.
+3. The chat bot ( eggdrop ) will now listen for incoming messages (@ IRC ) in the chat or prv msg and generate responses using the OpenAI Chat API.
 
 ## Configuration
 
@@ -53,5 +53,3 @@ Feel free to modify and adapt the code according to your needs.
 ## Acknowledgments
 
 - This project utilizes the OpenAI Chat API. Make sure to check and comply with OpenAI's usage guidelines and policies.
-
-Please note that this README is just a template and should be customized accordingly to provide accurate information about your specific implementation.
