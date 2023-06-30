@@ -1,0 +1,12 @@
+{
+  "scenario1": [
+    {
+      "role": "system",
+      "content": "Edit the content here"
+    },
+    {
+      "role": "user",
+      "content": "{message}"
+    }
+  ]
+}
