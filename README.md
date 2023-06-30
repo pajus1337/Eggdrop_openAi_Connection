@@ -4,7 +4,7 @@ This project consists of two scripts that work together to create a chat bot ( E
 
 ## Script 1: aiConection.tcl ( Eggdrop )
 
-This script is written in Tcl and serves as the interface between the IRC chat and the OpenAI Chat API. It listens for messages in the chat and sends them to the API for generating a response. The generated response is then displayed back in the chat.
+This script is written in Tcl and serves as the interface between the IRC bot ( eggdrop ) and the OpenAI Chat API ( python @ linux ) It listens for messages in the chat and sends them to the API for generating a response. The generated response is then displayed back in the chat.
 
 ## Script 2: OpenAIChatAPI.py
 
