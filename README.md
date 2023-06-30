@@ -1,4 +1,4 @@
-# OpenAI Chat Bot
+# OpenAI Chat Bot ( Eggdrop ) 
 
 This project consists of two scripts that work together to create a chat bot ( Eggdrop ) using the OpenAI Chat API.
 
