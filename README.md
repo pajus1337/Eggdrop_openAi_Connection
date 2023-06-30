@@ -1,7 +1,6 @@
+# OpenAI Chat Bot ( Eggdrop ) 
 
 ![SparkBuddy](https://github.com/pajus1337/Eggdrop_openAi_Connection/assets/74528115/1f05f5c7-3f95-47a3-bac8-73f1ae2aeaa3)
-
-# OpenAI Chat Bot ( Eggdrop ) 
 
 This project consists of two scripts that work together to create a chat bot ( Eggdrop ) using the OpenAI Chat API.
 
