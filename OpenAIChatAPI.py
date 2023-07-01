@@ -1,54 +1,74 @@
 from flask import Flask, request, jsonify
 import openai
 import json
+import logging
 
 app = Flask(__name__)
 
-# Set your OpenAI key ! Important !
-openai.api_key = 'Entry Your API Key here'
+# Set your OpenAI API Key here
+openai.api_key = 'API_Key'
 
-# True = onlyLan ( 127.0.0.1 ); False = Listen at ex.IP use ( 0.0.0.0 ) def port 5000 
+# Allow connection only via lan = true or allow connection via Internet = false
 isOnlyLan = True
+
+# Add logging to more debug info / disable if no needed.
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
-  # Handle Get or Post method ( Should work for both )
     if request.method == 'GET':
-     
+        # Handle GET request
         message = request.args.get('message', '')
     elif request.method == 'POST':
+        # Handle POST request
         data = request.get_json()
         message = data['message']
     else:
         return jsonify({'error': 'Invalid request method'})
 
-    # I have set the prompt in json in seperate file ( so you will have to create one and set prompt there ) otherweis change code to read prompt here. 
-    with open('prompts.json') as file:
-        prompts = json.load(file)
+   # Add Users Message to Conversation 
+    conversation.append({'role': 'user', 'content': message})
 
-    prompt = prompts['scenario1'].format(message=message)
+    try:
+        # Loading prompt from json file
+        with open('prompts.json') as file:
+            prompts = json.load(file)
 
-       # max_tokens  Adjust the desired response length
-       # n  Adjust the number of responses
-       # stop Set custom stop sequence if needed
-       # temperature Adjust the creativity of the responses
-    response = openai.Completion.create(
-        engine='text-davinci-003',
-        prompt=prompt,
-        max_tokens=100, 
-        n=1, 
-        stop=None,
-        temperature=0.7, 
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0
+        # Get the prompt based on the scenario
+        prompt = prompts['scenario1'].copy()
+        prompt[-1]['content'] = prompt[-1]['content'].format(message=message)
+
+        # Append prompt to conversation
+        conversation.extend(prompt)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        # Handle of possible errors
+        logging.error(str(e))
+        reply = "Sorry, but I have no time, I will get back to you later."
+        return jsonify({'reply': reply})
+
+    # Call the Chat API - Use at least version of gpt.3-5 Turbo
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=conversation,
+        # Adjust the temperature 
+        temperature=0.8,
+      # Adjust the max tokens
+        max_tokens=80  
+
     )
+    reply = response.choices[0].message.content.strip()
+
+    conversation.append({'role': 'assistant', 'content': reply})
+
+    # Log the reply Just for debug can be deactivated
+    logging.debug("Generated Reply: " + reply)
   
-    reply = response.choices[0].text.strip()
     return jsonify({'reply': reply})
 
 if __name__ == '__main__':
+    conversation = []
+
     if isOnlyLan:
-        app.run(host='127.0.0.1', port=5000)
+        app.run(host='127.0.0.1')
     else:
-        app.run(host='0.0.0.0', port=5000)
+        app.run(host='0.0.0.0')
