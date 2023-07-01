@@ -1,57 +1,122 @@
-# OpenAI Chat Bot ( Eggdrop ) 
+<!DOCTYPE html>
+<html>
 
-![SparkBuddy](https://github.com/pajus1337/Eggdrop_openAi_Connection/assets/74528115/1f05f5c7-3f95-47a3-bac8-73f1ae2aeaa3)
+<head>
+  <meta charset="UTF-8">
+    <h1>Eggdrop OpenAI Chat Bot + API Server in Python</h1>
+</head>
 
-This project consists of two scripts that work together to create a chat bot ( Eggdrop ) using the OpenAI Chat API.
+<body>
+  <p>This project implements a eggdrop chat bot that uses the OpenAI API to generate responses based on user input. It consists of two scripts: <code>aiConnection.tcl</code> and <code>OpenAIChatAPI.py</code>.</p>
+  <h2>Screenshot</h2>
+  <img src="https://github.com/pajus1337/Eggdrop_openAi_Connection/assets/74528115/b48b1c9b-1306-43cb-81c0-ef54f04f8bee" alt="SparkBuddy Screenshot">
 
-## Script 1: aiConnection.tcl ( Eggdrop )
+  <h2>Prerequisites</h2>
+  <p>Before running the scripts, make sure you have the following:</p>
 
-This script is written in Tcl and serves as the interface between the IRC bot ( eggdrop ) and the OpenAI Chat API ( python @ linux ) It listens for messages in the chat and sends them to the API for generating a response. The generated response is then displayed back in the chat.
+  <ul>
+    <li>For <code>aiConnection.tcl</code>:</li>
+    <ul>
+      <li>Tcl interpreter</li>
+      <li>Packages: <code>http</code>, <code>tls</code>, <code>json</code></li>
+    </ul>
+    <br>
+    <li>For <code>OpenAIChatAPI.py</code>:</li>
+    <ul>
+      <li>Python 3.x</li>
+      <li>Required packages: <code>flask</code>, <code>openai</code>, <code>json</code>, <code>logging</code></li>
+    </ul>
+  </ul>
+<h2>Setup</h2>
 
-## Script 2: OpenAIChatAPI.py ( Linux - run with screen ) 
+<h3>aiConnection.tcl</h3>
+<ol>
+  <li>Make sure you have the Tcl interpreter installed on your system.</li>
+  <li>Install the required packages by running the following commands:
+    <pre><code>tclsh
+tcl::pkg::install http tls json
+    </code></pre>
+  </li>
+</ol>
 
-This script is written in Python and sets up a Flask API that communicates with the OpenAI Chat API. It receives incoming chat messages, sends them to the OpenAI Chat API, and returns the generated response.
+<p>Script should be added to the Eggdrop configuration file (eggdrop.conf). Here's an example:</p>
 
-## Prerequisites
+<pre><code># Add the following line to your eggdrop.conf file
+source scripts/aiConnection.tcl
+</code></pre>
 
-Before running the scripts, make sure you have the following:
+<p>After adding the script, it is recommended to restart your Eggdrop bot using the ".restart" command to ensure the changes take effect.</p>
 
-- Tcl interpreter
-- Python 3.x
-- Required packages: `http`, `tls`, `json`, `flask`, `openai`
+<h3>OpenAIChatAPI.py</h3>
+<ol>
+  <li>Make sure you have Python installed on your system.</li>
+  <li>Install the required Python packages by running the following command:
+    <pre><code>pip install flask openai</code></pre>
+  </li>
+  <li>Set your OpenAI API key in the `OpenAIChatAPI.py` script. Replace `'API_Key'` with your actual OpenAI API key.</li>
+  <li>Create a file named `prompts.json` and populate it with the following content:
+    <pre><code>{
+  "scenario1": [
+    {
+      "role": "system",
+      "content": "Edit the content here"
+    },
+    {
+      "role": "user",
+      "content": "{message}"
+    }
+  ]
+}
+    </code></pre>
+  </li>
+  <li>Save the `OpenAIChatAPI.py` and `prompts.json` files in the same directory.</li>
+  <li>To start the API server, run the following command in the terminal:
+    <pre><code>python OpenAIChatAPI.py</code></pre>
+    The server will start running on either `http://127.0.0.1:5000` (for LAN-only access) or `http://0.0.0.0:5000` (for access from the internet).</li>
+  <li>Optionally, you can enable or disable logging for debugging purposes by modifying the <code>logging.basicConfig</code> line in the script.</li>
+</ol>
 
-## Setup
+<h2>Usage</h2>
+<p>Once you have completed the setup, you can interact with the chatbot through the Eggdrop bot. The bot will listen for messages starting with its nickname and forward them to the OpenAI Chat API server. The server will generate a response and send it back to the bot, which will then display the response in the channel or send it as a private message.</p>
 
-1. Clone the repository or download the scripts.
+<p>To use the chatbot, simply address a message to the bot's nickname, followed by your question or statement. For example, if the bot's nickname is "SparkBuddy", you can send a message like:</p>
 
-2. Set up your OpenAI API credentials by replacing the placeholder `api_key` in the `OpenAIChatAPI.py` script with your own OpenAI API key.
+<pre><code>SparkBuddy: How are you?</code></pre>
 
-3. Create a `prompts.json` file in the same directory as the `OpenAIChatAPI.py` script and define your chat prompts based on different scenarios. An example `prompts.json` file is provided in the repository.
+<p>The bot will process the message, send it to the OpenAI Chat API server, and display or send the generated response.</p>
 
-## Usage
+<p>The `prompts.json` file contains the conversation prompts used by the chatbot. You can customize the prompts by editing the content of the `scenario1` section in the file. The `{message}` placeholder in the user role content will be replaced with the user's message during runtime.</p>
 
-1. Run the `aIconnection.tcl` script using the Tcl interpreter like in eggdrop.cfg ( source scripts/script_name.tcl )
+<p>It is important to note that the OpenAI Chat API requires an active internet connection to function properly. Ensure that your server has internet access for the chatbot to work as expected.</p>
 
-2. Run the `OpenAIChatAPI.py` script using the Python interpreter.
+<p>Feel free to customize the chatbot behavior by modifying the `OpenAIChatAPI.py` script, 
+  adjusting parameters such as temperature and max tokens, or modifying the conversation prompts.</p>
+  
+  <h2>Configuration</h2>
+  <p>Both scripts provide configuration options that you can modify:</p>
 
-3. The chat bot ( eggdrop ) will now listen for incoming messages (@ IRC ) in the chat or prv msg and generate responses using the OpenAI Chat API.
+  <h3>aiConnection.tcl</h3>
+  <ul>
+    <li><code>respond_to_private_messages</code>: Set to 1 to enable responding to private messages, or 0 to disable.</li>
+    <li><code>respond_to_channel_questions</code>: Set to 1 to enable responding to channel questions, or 0 to disable.</li>
+    <li><code>reply_delay</code>: Time delay in milliseconds before sending a reply.</li>
+  </ul>
 
-## Configuration
+  <h3>OpenAIChatAPI.py</h3>
+  <ul>
+    <li><code>openai.api_key</code>: Set your OpenAI API key.</li>
+    <li><code>isOnlyLan</code>: Set to <code>True</code> to allow connections only via the local network, or <code>False</code> to allow connections via the internet.</li>
+    <li><code>temperature</code>: Adjust the temperature parameter for controlling the creativity of the responses.</li>
+    <li><code>max_tokens</code>: Adjust the maximum number of tokens in the generated response.</li>
+  </ul>
 
-In both scripts, there are some configuration options available:
+  <p>Feel free to modify these configuration options to customize the behavior of the chat bot according to your needs. :-)</p>
 
-- `respond_to_private_messages`: Set to 1 to enable responding to private messages, or 0 to disable.
-- `respond_to_channel_questions`: Set to 1 to enable responding to channel questions, or 0 to disable.
-- `reply_delay`: Time delay in milliseconds before sending a reply.
+  <h2>License</h2>
+  <p>This project is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>. Feel free to modify and adapt the code according to your requirements.</p>
 
-Feel free to modify these configuration options to customize the behavior of the chat bot.
+  <h2>Acknowledgments</h2>
+  <p>This project utilizes the OpenAI Chat API. Make sure to review and comply with OpenAI's usage guidelines and policies.</p>
+</body>
 
-## License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
-Feel free to modify and adapt the code according to your needs.
-
-## Acknowledgments
-
-- This project utilizes the OpenAI Chat API. Make sure to check and comply with OpenAI's usage guidelines and policies.
+</html>
